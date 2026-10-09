@@ -1,0 +1,88 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+// (Adjacency List)
+void dfsLista(int u, const vector<vector<int>>& adj, vector<int>& vis) {
+    if (vis[u]) return;
+    vis[u] = 1;
+    cout << u << " ";
+
+    for (int v : adj[u]) {
+        dfsLista(v, adj, vis);
+    }
+}
+
+// (Adjacency Matrix)
+void dfsMatrica(int u, const vector<vector<int>>& mat, vector<int>& vis, int n) {
+    if (vis[u]) return;
+    vis[u] = 1;
+    cout << u << " ";
+
+    for (int v = 0; v < n; ++v) {
+        if (mat[u][v] == 1) {
+            dfsMatrica(v, mat, vis, n);
+        }
+    }
+}
+
+// (Edge List)
+void dfsRabovi(int u, const vector<pair<int, int>>& edges, vector<int>& vis) {
+    if (vis[u]) return;
+    vis[u] = 1;
+    cout << u << " ";
+
+    for (const auto& e : edges) {
+        if (e.first == u) {
+            dfsRabovi(e.second, edges, vis);
+        }
+    }
+}
+
+int main() {
+    int n = 4;
+    int src = 0;
+
+    //Adjacency list
+    vector<vector<int>> gList = {
+        {2},
+        {0, 2},
+        {0, 1, 3},
+        {2}
+    };
+
+    // Adjacency matrix
+    vector<vector<int>> gMat = {
+        {0, 0, 1, 0},
+        {1, 0, 1, 0},
+        {1, 1, 0, 1},
+        {0, 0, 1, 0}
+    };
+
+    // Edge list
+    vector<pair<int, int>> gEdges = {
+        {0, 2},
+        {1, 0}, {1, 2},
+        {2, 0}, {2, 1}, {2, 3},
+        {3, 2}
+    };
+
+    vector<int> vis(n, 0);
+
+    cout << "DFS (Lista): ";
+    dfsLista(src, gList, vis);
+    cout << "\n";
+
+    vis.assign(n, 0);
+    cout << "DFS (Matrica): ";
+    dfsMatrica(src, gMat, vis, n);
+    cout << "\n";
+
+    vis.assign(n, 0);
+    cout << "DFS (Rabovi): ";
+    dfsRabovi(src, gEdges, vis);
+    cout << "\n";
+
+    return 0;
+}
